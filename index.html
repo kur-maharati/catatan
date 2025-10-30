@@ -1624,4 +1624,38 @@
         updateSchedules();
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9917847e51421c0e',t:'MTc2MDk1Mjg0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>
+function toMinutes(time) {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function getCurrentPeriod() {
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  // ambil hari (1 = Senin ... 6 = Sabtu)
+  const day = now.getDay();
+  const scheduleSource = (day === 6) ? saturdaySchedules["KELAS-1"] : schedules["KELAS-1"][day];
+  if (!scheduleSource) return "-";
+
+  const current = scheduleSource.find(item => {
+    if (!item.time.includes(":")) return false;
+    const [start, end] = item.time.split(" - ");
+    return currentMinutes >= toMinutes(start) && currentMinutes < toMinutes(end);
+  });
+
+  return current ? current.period : "-";
+}
+
+function updateHeaderTime() {
+  const now = new Date();
+  document.getElementById("currentTime").textContent = now.toLocaleTimeString("id-ID", { hour12: false });
+  document.getElementById("currentDate").textContent = now.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  document.getElementById("currentPeriod").textContent = `Jam Ke ${getCurrentPeriod()}`;
+}
+
+setInterval(updateHeaderTime, 1000);
+updateHeaderTime();
+</script>
 </html>
