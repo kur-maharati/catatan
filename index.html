@@ -1305,9 +1305,9 @@
             // Jika tidak ada mata pelajaran saat ini, cari yang terdekat (skip breaks)
             if (currentIndex === -1) {
                 for (let i = 0; i < schedule.length; i++) {
-                    if (schedule[i].period === 'break1' || schedule[i].period === 'break2') {
-                        continue;
-                    }
+                   // if (schedule[i].period === 'break1' || schedule[i].period === 'break2') {
+                      //  continue;
+                  //  }
                     
                     const timeRange = schedule[i].time.split(' - ');
                     const startTime = timeRange[0].split(':');
@@ -1320,55 +1320,38 @@
                 }
             }
             
-            // Find current and next non-break subjects
-            let current = null;
-            let next = null;
-            
-            if (currentIndex >= 0) {
-                current = schedule[currentIndex];
-                
-                // Find next non-break subject
-                for (let i = currentIndex + 1; i < schedule.length; i++) {
-                    if (schedule[i].period !== 'break1' && schedule[i].period !== 'break2') {
-                        next = schedule[i];
-                        break;
-                    }
-                }
-            }
-            
-            // If no current found, use first non-break subject
-            if (!current) {
-                for (let i = 0; i < schedule.length; i++) {
-                    if (schedule[i].period !== 'break1' && schedule[i].period !== 'break2') {
-                        current = schedule[i];
-                        break;
-                    }
-                }
-            }
-            
-            // If no next found, use second non-break subject
-            if (!next) {
-                let count = 0;
-                for (let i = 0; i < schedule.length; i++) {
-                    if (schedule[i].period !== 'break1' && schedule[i].period !== 'break2') {
-                        count++;
-                        if (count === 2) {
-                            next = schedule[i];
-                            break;
-                        }
-                    }
-                }
-            }
-            
-            // Fallback if still no subjects found
-            if (!current) {
-                current = { subject: 'Mata Pelajaran', teacher: 'Nama Guru', time: '07:15 - 07:55', period: 1 };
-            }
-            if (!next) {
-                next = { subject: 'Mata Pelajaran', teacher: 'Nama Guru', time: '07:55 - 08:35', period: 2 };
-            }
-            
-            return { current, next, currentIndex };
+// Find current and next subjects (include breaks)
+let current = null;
+let next = null;
+
+if (currentIndex >= 0) {
+    current = schedule[currentIndex];
+    // Ambil pelajaran berikutnya, termasuk istirahat
+    if (currentIndex + 1 < schedule.length) {
+        next = schedule[currentIndex + 1];
+    }
+}
+
+// Jika belum ada pelajaran dimulai
+if (!current) {
+    current = schedule[0];
+}
+
+// Jika tidak ada pelajaran berikut
+if (!next && currentIndex + 1 < schedule.length) {
+    next = schedule[currentIndex + 1];
+}
+
+// Fallback default jika benar-benar kosong
+if (!current) {
+    current = { subject: 'Mata Pelajaran', teacher: 'Nama Guru', time: '07:15 - 07:55', period: 1 };
+}
+if (!next) {
+    next = { subject: 'Mata Pelajaran', teacher: 'Nama Guru', time: '07:55 - 08:35', period: 2 };
+}
+
+return { current, next, currentIndex };
+
         }
 
         function getCurrentPeriod() {
