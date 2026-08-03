@@ -1,50 +1,53 @@
-/* ==================================
-   GLOBAL
-================================== */
-
+/* =================================
+   RESET
+================================= */
 
 *{
-
-box-sizing:border-box;
-
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
 }
+
 
 
 body{
 
-margin:0;
+    background:#f5c400;
 
-padding:0;
+    min-height:100vh;
 
-font-family:
-Arial,
-Helvetica,
-sans-serif;
+    display:flex;
 
-background:#061a40;
+    justify-content:center;
 
-color:white;
-
-height:100vh;
-
-overflow:hidden;
+    align-items:center;
 
 }
 
 
 
+
+
+/* =================================
+   CONTAINER
+================================= */
 
 .container{
 
-width:100%;
+    width:95vw;
 
-height:100vh;
+    height:95vh;
 
-padding:15px;
+    background:white;
 
-display:flex;
+    border-radius:20px;
 
-flex-direction:column;
+    padding:20px;
+
+    box-shadow:0 0 25px rgba(0,0,0,0.3);
+
+    overflow:hidden;
 
 }
 
@@ -52,51 +55,43 @@ flex-direction:column;
 
 
 
-/* ==================================
+/* =================================
    HEADER
-================================== */
-
+================================= */
 
 header{
 
-height:18%;
+    height:15%;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-background:#0b2d6b;
-
-border-radius:15px;
-
-padding:15px 25px;
+    border-bottom:4px solid #f5c400;
 
 }
-
-
 
 
 
 .logo img{
 
-width:90px;
+    width:90px;
 
-height:90px;
+    height:90px;
 
-object-fit:contain;
+    object-fit:contain;
 
 }
 
 
 
-
 .identitas{
 
-text-align:center;
+    flex:1;
 
-flex:1;
+    margin-left:20px;
 
 }
 
@@ -104,11 +99,9 @@ flex:1;
 
 .identitas h1{
 
-margin:0;
+    font-size:40px;
 
-font-size:40px;
-
-font-weight:bold;
+    color:#003b73;
 
 }
 
@@ -116,9 +109,11 @@ font-weight:bold;
 
 .identitas h3{
 
-margin:10px 0;
+    margin-top:8px;
 
-font-size:22px;
+    font-size:20px;
+
+    color:#555;
 
 }
 
@@ -127,17 +122,23 @@ font-size:22px;
 
 .clock{
 
-font-size:45px;
+    background:#003b73;
 
-font-weight:bold;
+    color:white;
 
-background:#f4c430;
+    padding:20px 30px;
 
-color:#061a40;
+    border-radius:15px;
 
-padding:15px 25px;
+}
 
-border-radius:12px;
+
+
+#jamDigital{
+
+    font-size:45px;
+
+    font-weight:bold;
 
 }
 
@@ -145,43 +146,38 @@ border-radius:12px;
 
 
 
-
-/* ==================================
-   INFORMASI JAM
-================================== */
+/* =================================
+   INFORMASI
+================================= */
 
 
 .info{
 
-height:15%;
+    height:18%;
 
-display:grid;
+    display:grid;
 
-grid-template-columns:
-repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:15px;
+    gap:15px;
 
-margin-top:15px;
+    margin-top:20px;
 
 }
-
 
 
 
 .box{
 
-background:#0b2d6b;
+    background:#003b73;
 
-border-radius:15px;
+    color:white;
 
-display:flex;
+    border-radius:15px;
 
-flex-direction:column;
+    text-align:center;
 
-justify-content:center;
-
-align-items:center;
+    padding:15px;
 
 }
 
@@ -189,9 +185,7 @@ align-items:center;
 
 .box h3{
 
-margin:0;
-
-font-size:20px;
+    font-size:18px;
 
 }
 
@@ -199,11 +193,11 @@ font-size:20px;
 
 .box h1{
 
-margin:5px;
+    margin-top:10px;
 
-font-size:42px;
+    font-size:35px;
 
-color:#f4c430;
+    color:#f5c400;
 
 }
 
@@ -212,33 +206,40 @@ color:#f4c430;
 
 
 
-/* ==================================
-   TABEL JADWAL
-================================== */
+/* =================================
+   TABEL
+================================= */
 
 
 .jadwal{
 
-height:57%;
+    height:60%;
 
-margin-top:15px;
+    margin-top:20px;
 
-overflow:hidden;
+    overflow:hidden;
 
 }
-
 
 
 
 table{
 
-width:100%;
+    width:100%;
 
-height:100%;
+    border-collapse:collapse;
 
-border-collapse:collapse;
+    table-layout:fixed;
 
-table-layout:fixed;
+}
+
+
+
+thead{
+
+    background:#003b73;
+
+    color:white;
 
 }
 
@@ -246,13 +247,9 @@ table-layout:fixed;
 
 th{
 
-background:#f4c430;
+    font-size:20px;
 
-color:#061a40;
-
-font-size:20px;
-
-padding:10px;
+    padding:15px;
 
 }
 
@@ -260,73 +257,47 @@ padding:10px;
 
 td{
 
-background:#0b2d6b;
+    border-bottom:2px solid #ddd;
 
-border:2px solid #061a40;
+    padding:14px;
 
-text-align:center;
+    text-align:center;
 
-font-size:22px;
-
-padding:8px;
+    font-size:20px;
 
 }
 
 
 
-tbody tr{
+tbody tr:nth-child(even){
 
-height:11%;
-
-}
-
-
-
-
-
-/* ukuran kolom */
-
-
-th:nth-child(1),
-td:nth-child(1){
-
-width:12%;
+    background:#f9f9f9;
 
 }
 
 
 
-th:nth-child(2),
-td:nth-child(2){
+.kelas{
 
-width:23%;
+    font-weight:bold;
 
-}
-
-
-
-th:nth-child(3),
-td:nth-child(3){
-
-width:18%;
+    color:#003b73;
 
 }
 
 
 
-th:nth-child(4),
-td:nth-child(4){
+.mapel{
 
-width:27%;
+    font-weight:bold;
 
 }
 
 
 
-th:nth-child(5),
-td:nth-child(5){
+.guru{
 
-width:20%;
+    color:#555;
 
 }
 
@@ -336,40 +307,36 @@ width:20%;
 
 
 
-/* ==================================
-   BUTTON FULLSCREEN
-================================== */
+/* =================================
+   FULLSCREEN BUTTON
+================================= */
 
 
 #btnFullscreen{
 
+    margin-top:15px;
 
-height:50px;
+    padding:12px 25px;
 
-margin-top:10px;
+    border:none;
 
-border:none;
+    border-radius:10px;
 
-border-radius:10px;
+    background:#003b73;
 
-background:#f4c430;
+    color:white;
 
-color:#061a40;
+    font-size:18px;
 
-font-size:22px;
-
-font-weight:bold;
-
-cursor:pointer;
+    cursor:pointer;
 
 }
-
 
 
 
 #btnFullscreen:hover{
 
-opacity:0.8;
+    background:#0055a5;
 
 }
 
@@ -378,104 +345,17 @@ opacity:0.8;
 
 
 
-/* ==================================
-   MODE FULLSCREEN
-================================== */
-
-
-:fullscreen body{
-
-background:#061a40;
-
-}
-
+/* =================================
+   FULLSCREEN MODE
+================================= */
 
 
 :fullscreen .container{
 
-padding:20px;
+    width:100vw;
 
-}
+    height:100vh;
 
+    border-radius:0;
 
-
-
-
-
-
-/* ==================================
-   RESPONSIVE
-================================== */
-
-
-@media(max-width:1000px){
-
-
-.identitas h1{
-
-font-size:28px;
-
-}
-
-
-.clock{
-
-font-size:32px;
-
-}
-
-
-
-td{
-
-font-size:16px;
-
-}
-
-
-th{
-
-font-size:15px;
-
-}
-
-
-.box h1{
-
-font-size:30px;
-
-}
-
-
-
-}
-/* ===========================
-   TABEL JADWAL
-=========================== */
-
-.kelas{
-    font-weight:bold;
-    font-size:24px;
-}
-
-.mapel{
-    font-weight:bold;
-    color:#FFD54F;
-}
-
-.guru{
-    color:#FFFFFF;
-}
-
-.mapel-next{
-    color:#90CAF9;
-}
-
-.guru-next{
-    color:#E0E0E0;
-}
-
-tbody tr:hover{
-    background:#123B82;
-    transition:.3s;
 }
