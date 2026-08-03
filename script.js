@@ -1,7 +1,6 @@
 // =================================
-// KONFIGURASI
+// KONFIGURASI API
 // =================================
-
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbwnHcUsBzP4Xj5A_5FzzmkMS_5-58-AmdvmwLsao974YP8oJeywcYR5OppK2ShsWxY7VA/exec";
@@ -13,62 +12,56 @@ const API_URL =
 // JAM DIGITAL
 // =================================
 
-
 function updateClock(){
 
-
-let now = new Date();
-
-
-let jam =
-String(now.getHours())
-.padStart(2,"0");
+    const sekarang = new Date();
 
 
-let menit =
-String(now.getMinutes())
-.padStart(2,"0");
+    let jam = String(
+        sekarang.getHours()
+    ).padStart(2,"0");
 
 
-let detik =
-String(now.getSeconds())
-.padStart(2,"0");
+    let menit = String(
+        sekarang.getMinutes()
+    ).padStart(2,"0");
 
 
+    let detik = String(
+        sekarang.getSeconds()
+    ).padStart(2,"0");
 
-document
-.getElementById("jamDigital")
-.innerHTML =
-`${jam}:${menit}:${detik}`;
+
+    document
+    .getElementById("jamDigital")
+    .innerHTML =
+    `${jam}:${menit}:${detik}`;
 
 
 
-let hari =
-now.toLocaleDateString(
-"id-ID",
-{
-weekday:"long",
-day:"numeric",
-month:"long",
-year:"numeric"
-}
-);
+    let tanggal =
+    sekarang.toLocaleDateString(
+        "id-ID",
+        {
+            weekday:"long",
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+        }
+    );
 
 
-
-document
-.getElementById("tanggal")
-.innerHTML =
-hari;
-
+    document
+    .getElementById("tanggal")
+    .innerHTML =
+    tanggal;
 
 }
-
 
 
 setInterval(
-updateClock,
-1000
+    updateClock,
+    1000
 );
 
 
@@ -78,47 +71,39 @@ updateClock();
 
 
 
-
 // =================================
-// AMBIL DATA API
+// AMBIL DATA DARI APPS SCRIPT API
 // =================================
-
 
 function loadJadwal(){
-
 
 
 fetch(API_URL)
 
 
-
-.then(response=>response.json())
-
+.then(response => response.json())
 
 
-.then(data=>{
+.then(data => {
 
 
-console.log(data);
+    console.log(data);
 
 
-
-tampilkanData(data);
-
+    tampilkanJadwal(data);
 
 
 })
 
 
+.catch(error => {
 
-.catch(error=>{
-
-
-console.log(error);
-
+    console.log(
+        "Gagal mengambil data",
+        error
+    );
 
 });
-
 
 
 }
@@ -128,18 +113,15 @@ console.log(error);
 
 
 
-
 // =================================
-// TAMPILKAN DATA
+// MENAMPILKAN DATA JADWAL
 // =================================
 
-
-function tampilkanData(data){
-
+function tampilkanJadwal(data){
 
 
-// jam ke
 
+// Jam Ke
 
 document
 .getElementById("jamKe")
@@ -147,6 +129,8 @@ document
 data.jamKe;
 
 
+
+// Jam selesai
 
 document
 .getElementById("jamSelesai")
@@ -156,64 +140,48 @@ data.selesai;
 
 
 
-
-let tabel="";
-
+let tabel = "";
 
 
 
 
-data.data.forEach(item=>{
+// semua kelas
+
+data.data.forEach(
+(item)=>{
 
 
 tabel += `
-
 
 <tr>
 
 
 <td>
-
 ${item.kelas}
-
 </td>
 
 
-
 <td>
-
 ${item.sekarang.mapel}
-
 </td>
 
 
-
 <td>
-
 ${item.sekarang.guru}
-
 </td>
 
 
-
 <td>
-
 ${item.berikutnya.mapel}
-
 </td>
-
 
 
 <td>
-
 ${item.berikutnya.guru}
-
 </td>
-
 
 
 </tr>
-
 
 `;
 
@@ -239,13 +207,11 @@ tabel;
 
 
 
-
 // =================================
 // COUNTDOWN
 // =================================
 
-
-function countdown(){
+function updateCountdown(){
 
 
 
@@ -256,14 +222,17 @@ document
 
 
 
+
 if(
-selesai=="-" ||
-selesai==""
+selesai === "-" ||
+selesai === ""
 ){
 
 return;
 
 }
+
+
 
 
 
@@ -277,18 +246,20 @@ new Date();
 
 
 
-let bagian =
+let waktu =
 selesai.split(":");
 
 
 
 target.setHours(
-bagian[0]
+parseInt(waktu[0])
 );
 
+
 target.setMinutes(
-bagian[1]
+parseInt(waktu[1])
 );
+
 
 target.setSeconds(0);
 
@@ -302,13 +273,11 @@ target - sekarang;
 
 
 
-
 if(selisih < 0){
 
 selisih = 0;
 
 }
-
 
 
 
@@ -368,11 +337,9 @@ String(detik)
 
 
 setInterval(
-countdown,
+updateCountdown,
 1000
 );
-
-
 
 
 
@@ -384,22 +351,31 @@ countdown,
 // FULLSCREEN
 // =================================
 
-
 document
 .getElementById("btnFullscreen")
-.onclick=function(){
+.onclick =
+function(){
 
 
-let elem =
+let layar =
 document.documentElement;
 
 
 
 if(
-elem.requestFullscreen
+layar.requestFullscreen
 ){
 
-elem.requestFullscreen();
+layar.requestFullscreen();
+
+}
+
+
+else if(
+layar.webkitRequestFullscreen
+){
+
+layar.webkitRequestFullscreen();
 
 }
 
@@ -414,14 +390,17 @@ elem.requestFullscreen();
 
 
 // =================================
-// AUTO REFRESH DATA
+// AUTO LOAD DATA
 // =================================
 
 
+// pertama kali buka
 
 loadJadwal();
 
 
+
+// update setiap 30 detik
 
 setInterval(
 loadJadwal,
