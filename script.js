@@ -7,6 +7,10 @@ const API_URL =
 
 
 
+let waktuSelesai = "-";
+
+
+
 
 // =================================
 // JAM DIGITAL
@@ -14,28 +18,34 @@ const API_URL =
 
 function updateClock(){
 
+
     const sekarang = new Date();
 
 
-    let jam = String(
-        sekarang.getHours()
-    ).padStart(2,"0");
+
+    let jam =
+    String(sekarang.getHours())
+    .padStart(2,"0");
 
 
-    let menit = String(
-        sekarang.getMinutes()
-    ).padStart(2,"0");
+
+    let menit =
+    String(sekarang.getMinutes())
+    .padStart(2,"0");
 
 
-    let detik = String(
-        sekarang.getSeconds()
-    ).padStart(2,"0");
+
+    let detik =
+    String(sekarang.getSeconds())
+    .padStart(2,"0");
+
 
 
     document
     .getElementById("jamDigital")
     .innerHTML =
     `${jam}:${menit}:${detik}`;
+
 
 
 
@@ -51,17 +61,20 @@ function updateClock(){
     );
 
 
+
     document
     .getElementById("tanggal")
     .innerHTML =
     tanggal;
 
+
 }
 
 
+
 setInterval(
-    updateClock,
-    1000
+updateClock,
+1000
 );
 
 
@@ -71,8 +84,9 @@ updateClock();
 
 
 
+
 // =================================
-// AMBIL DATA DARI APPS SCRIPT API
+// AMBIL DATA API
 // =================================
 
 function loadJadwal(){
@@ -81,27 +95,31 @@ function loadJadwal(){
 fetch(API_URL)
 
 
-.then(response => response.json())
+.then(response=>response.json())
 
 
-.then(data => {
+.then(data=>{
 
 
-    console.log(data);
+console.log(data);
 
 
-    tampilkanJadwal(data);
+
+tampilkanJadwal(data);
+
 
 
 })
 
 
-.catch(error => {
+.catch(error=>{
 
-    console.log(
-        "Gagal mengambil data",
-        error
-    );
+
+console.log(
+"Gagal mengambil API",
+error
+);
+
 
 });
 
@@ -113,45 +131,59 @@ fetch(API_URL)
 
 
 
+
 // =================================
-// MENAMPILKAN DATA JADWAL
+// MENAMPILKAN JADWAL
 // =================================
 
 function tampilkanJadwal(data){
 
 
 
-// Jam Ke
+// ==========================
+// JAM INFORMASI
+// ==========================
+
 
 document
 .getElementById("jamKe")
 .innerHTML =
-data.jamKe;
+data.jam.namaJam;
 
 
-
-// Jam selesai
 
 document
 .getElementById("jamSelesai")
 .innerHTML =
-data.selesai;
+data.jam.selesai;
+
+
+
+// simpan untuk countdown
+
+waktuSelesai =
+data.jam.selesai;
 
 
 
 
-let tabel = "";
+
+
+// ==========================
+// TABEL SEMUA KELAS
+// ==========================
+
+
+let tabel="";
 
 
 
-
-// semua kelas
-
-data.data.forEach(
+data.jadwal.data.forEach(
 (item)=>{
 
 
 tabel += `
+
 
 <tr>
 
@@ -161,9 +193,11 @@ ${item.kelas}
 </td>
 
 
+
 <td>
 ${item.sekarang.mapel}
 </td>
+
 
 
 <td>
@@ -171,9 +205,11 @@ ${item.sekarang.guru}
 </td>
 
 
+
 <td>
 ${item.berikutnya.mapel}
 </td>
+
 
 
 <td>
@@ -181,10 +217,11 @@ ${item.berikutnya.guru}
 </td>
 
 
+
 </tr>
 
-`;
 
+`;
 
 
 });
@@ -207,26 +244,27 @@ tabel;
 
 
 
+
+
+
 // =================================
-// COUNTDOWN
+// COUNTDOWN OTOMATIS
 // =================================
 
 function updateCountdown(){
 
 
 
-let selesai =
-document
-.getElementById("jamSelesai")
-.innerHTML;
-
-
-
-
 if(
-selesai === "-" ||
-selesai === ""
+waktuSelesai=="-" ||
+waktuSelesai==""
 ){
+
+document
+.getElementById("countdown")
+.innerHTML =
+"00:00:00";
+
 
 return;
 
@@ -247,7 +285,7 @@ new Date();
 
 
 let waktu =
-selesai.split(":");
+waktuSelesai.split(":");
 
 
 
@@ -273,18 +311,21 @@ target - sekarang;
 
 
 
-if(selisih < 0){
 
-selisih = 0;
+if(selisih<0){
+
+selisih=0;
 
 }
 
 
 
 
+
+
 let jam =
 Math.floor(
-selisih /
+selisih/
 (1000*60*60)
 );
 
@@ -319,14 +360,22 @@ document
 
 String(jam)
 .padStart(2,"0")
+
 +
+
 ":"
+
 +
+
 String(menit)
 .padStart(2,"0")
+
 +
+
 ":"
+
 +
+
 String(detik)
 .padStart(2,"0");
 
@@ -347,14 +396,18 @@ updateCountdown,
 
 
 
+
+
 // =================================
 // FULLSCREEN
 // =================================
+
 
 document
 .getElementById("btnFullscreen")
 .onclick =
 function(){
+
 
 
 let layar =
@@ -368,14 +421,15 @@ layar.requestFullscreen
 
 layar.requestFullscreen();
 
-}
 
+}
 
 else if(
 layar.webkitRequestFullscreen
 ){
 
 layar.webkitRequestFullscreen();
+
 
 }
 
@@ -389,18 +443,22 @@ layar.webkitRequestFullscreen();
 
 
 
-// =================================
-// AUTO LOAD DATA
-// =================================
 
 
-// pertama kali buka
+// =================================
+// LOAD PERTAMA
+// =================================
+
 
 loadJadwal();
 
 
 
-// update setiap 30 detik
+
+// =================================
+// REFRESH DATA
+// =================================
+
 
 setInterval(
 loadJadwal,
