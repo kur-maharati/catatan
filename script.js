@@ -472,3 +472,4 @@ function(){
         loadJadwal,
         AUTO_REFRESH
     );
+});
