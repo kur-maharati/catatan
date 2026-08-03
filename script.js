@@ -204,14 +204,12 @@ function tampilkanJadwal(data){
 
 
     if(
-    data.jadwal &&
-    data.jadwal.data
-    ){
+data.jadwal
+){
 
 
-
-        data.jadwal.data.forEach(
-        item=>{
+    data.jadwal.forEach(
+    item=>{
 
 
             html +=
@@ -469,17 +467,3 @@ function(){
         loadJadwal,
         AUTO_REFRESH
     );
-
-    async function loadJadwal(){
-
-    const response = await fetch(API_URL);
-
-    const data = await response.json();
-
-    alert(JSON.stringify(data));
-
-}
-
-
-
-});
