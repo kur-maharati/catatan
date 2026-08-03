@@ -5,94 +5,216 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" 
+content="width=device-width, initial-scale=1.0">
 
-<title>Display Jadwal SMK Maharati</title>
+<title>
+Jadwal Digital SMK Maharati
+</title>
+
 
 <link rel="stylesheet" href="style.css">
 
+
 </head>
+
 
 <body>
 
+
+<div class="container">
+
+
+<!-- HEADER -->
+
 <header>
 
-<div class="left">
 
-<img src="assets/logo.png" id="logo">
+<div class="logo">
 
-<div>
-
-<h1 id="schoolName">Loading...</h1>
-
-<div id="subtitle">Loading...</div>
+<img src="assets/logo.png" 
+id="logoSekolah">
 
 </div>
 
+
+
+<div class="identitas">
+
+<h1 id="namaSekolah">
+SMK MAHARATI
+</h1>
+
+
+<h3 id="tanggal">
+-
+</h3>
+
+
 </div>
 
-<div class="center">
 
-<div id="clock">
 
+
+<div class="clock">
+
+<span id="jamDigital">
 00:00:00
+</span>
+
 
 </div>
 
-<div id="today">
-
-Loading...
-
-</div>
-
-<div id="period">
-
-Jam Ke -
-
-</div>
-
-<div id="countdown">
-
-Sisa -
-
-</div>
-
-</div>
-
-<div class="right">
-
-<button id="fullscreenBtn">
-
-Fullscreen
-
-</button>
-
-</div>
 
 </header>
 
-<main>
 
-<div id="gridKelas">
+
+
+
+<!-- INFORMASI JAM -->
+
+
+<section class="info">
+
+
+<div class="box">
+
+<h3>
+JAM KE
+</h3>
+
+<h1 id="jamKe">
+-
+</h1>
 
 </div>
 
-</main>
 
-<footer>
 
-<div id="status">
+<div class="box">
 
-Menghubungkan...
+<h3>
+SELESAI
+</h3>
+
+<h1 id="jamSelesai">
+-
+</h1>
 
 </div>
 
-</footer>
 
-<script src="config.js"></script>
+
+
+<div class="box">
+
+<h3>
+COUNTDOWN
+</h3>
+
+<h1 id="countdown">
+00:00:00
+</h1>
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- JADWAL SEMUA KELAS -->
+
+
+<section class="jadwal">
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+KELAS
+</th>
+
+
+<th>
+PELAJARAN SAAT INI
+</th>
+
+
+<th>
+GURU
+</th>
+
+
+<th>
+PELAJARAN BERIKUTNYA
+</th>
+
+
+<th>
+GURU BERIKUTNYA
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+<tbody id="dataJadwal">
+
+
+<!-- Data dari Apps Script masuk di sini -->
+
+
+</tbody>
+
+
+</table>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- FULLSCREEN -->
+
+
+<button 
+id="btnFullscreen">
+
+⛶ FULLSCREEN
+
+</button>
+
+
+
+
+</div>
+
+
 
 <script src="script.js"></script>
 
+
 </body>
+
 
 </html>
