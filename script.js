@@ -3,11 +3,14 @@
 // =================================
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbyZ6PYYJD1-Rrd8JrL17y3Wws5FWxGqKoNutAtvFuy7YM5EiBhaPeNMdvJ_46qI4xC2-g/exec";
+"https://script.google.com/macros/s/AKfycbxELqlsvsAs06NsLFoVCfvfwRRV2IqZnijioyMK6HsZxwJ2i9Pu-XM-iiT62mxALl11oA/exec";
+
 
 const AUTO_REFRESH = 30000;
 
+
 let waktuSelesai = "-";
+
 
 
 
@@ -17,25 +20,39 @@ let waktuSelesai = "-";
 
 function updateClock(){
 
+
     const sekarang = new Date();
 
-    document.getElementById("jamDigital").innerHTML =
-        sekarang.toLocaleTimeString("id-ID",{
-            hour12:false
-        });
 
-    document.getElementById("tanggal").innerHTML =
-        sekarang.toLocaleDateString("id-ID",{
+
+    document.getElementById("jamDigital")
+    .innerHTML =
+    sekarang.toLocaleTimeString(
+        "id-ID",
+        {
+            hour12:false
+        }
+    );
+
+
+
+    document.getElementById("tanggal")
+    .innerHTML =
+    sekarang.toLocaleDateString(
+        "id-ID",
+        {
             weekday:"long",
             day:"numeric",
             month:"long",
             year:"numeric"
-        });
+        }
+    );
+
 
 }
 
-setInterval(updateClock,1000);
-updateClock();
+
+
 
 
 
@@ -46,29 +63,44 @@ updateClock();
 
 async function loadJadwal(){
 
+
     try{
 
-        const response = await fetch(API_URL + "?t=" + Date.now());
 
-        const data = await response.json();
+        const response =
+        await fetch(
+            API_URL + "?t=" + Date.now()
+        );
+
+
+
+        const data =
+        await response.json();
+
+
 
         console.log(data);
 
-        if(data.status === false){
 
-            console.error(data.message);
-
-            return;
-
-        }
 
         tampilkanJadwal(data);
 
-    }catch(error){
 
-        console.error(error);
 
     }
+
+    catch(error){
+
+
+        console.error(
+            "Gagal mengambil data",
+            error
+        );
+
+
+    }
+
+
 
 }
 
@@ -77,97 +109,163 @@ async function loadJadwal(){
 
 
 
+
+
 // =================================
-// MENAMPILKAN DATA
+// TAMPILKAN DATA
 // =================================
 
 function tampilkanJadwal(data){
 
-    if(!data) return;
+
+
+    if(!data)
+    return;
 
 
 
     // =====================
-    // Setting
+    // SETTING
     // =====================
+
 
     if(data.setting){
 
+
         if(data.setting.NamaSekolah){
 
-            document.getElementById("namaSekolah").innerHTML =
+
+            document
+            .getElementById("namaSekolah")
+            .innerHTML =
             data.setting.NamaSekolah;
+
 
         }
 
+
     }
 
 
 
+
+
+
     // =====================
-    // Jam
+    // JAM
     // =====================
+
 
     if(data.jam){
 
-        document.getElementById("jamKe").innerHTML =
-        data.jam.namaJam || "-";
 
 
-        document.getElementById("jamSelesai").innerHTML =
-        data.jam.selesai || "-";
+        document
+        .getElementById("jamKe")
+        .innerHTML =
+        data.jam.jamKe;
+
+
+
+        document
+        .getElementById("namaJam")
+        .innerHTML =
+        data.jam.namaJam;
+
+
+
+        document
+        .getElementById("jamSelesai")
+        .innerHTML =
+        data.jam.selesai;
+
 
 
         waktuSelesai =
-        data.jam.selesai || "-";
+        data.jam.selesai;
+
+
 
     }
 
 
 
+
+
+
+
     // =====================
-    // Jadwal
+    // JADWAL KELAS
     // =====================
 
-    let html = "";
 
-    if(data.jadwal && data.jadwal.data){
+    let html="";
 
-        data.jadwal.data.forEach(item=>{
 
-            html += `
-            <tr>
 
-                <td class="kelas">
-                    ${item.kelas}
-                </td>
+    if(
+    data.jadwal &&
+    data.jadwal.data
+    ){
 
-                <td class="mapel">
-                    ${item.sekarang?.mapel ?? "-"}
-                </td>
 
-                <td class="guru">
-                    ${item.sekarang?.guru ?? "-"}
-                </td>
 
-                <td class="mapel-next">
-                    ${item.berikutnya?.mapel ?? "-"}
-                </td>
+        data.jadwal.data.forEach(
+        item=>{
 
-                <td class="guru-next">
-                    ${item.berikutnya?.guru ?? "-"}
-                </td>
 
-            </tr>
-            `;
+            html +=
+`
+<tr>
+
+<td class="kelas">
+${item.kelas}
+</td>
+
+
+<td>
+${item.sekarang.mapel}
+</td>
+
+
+<td>
+${item.sekarang.guru}
+</td>
+
+
+<td>
+${item.berikutnya.mapel}
+</td>
+
+
+<td>
+${item.berikutnya.guru}
+</td>
+
+
+</tr>
+`;
+
+
 
         });
 
+
+
     }
 
-    document.getElementById("dataJadwal").innerHTML = html;
+
+
+    document
+    .getElementById("dataJadwal")
+    .innerHTML =
+    html;
+
+
 
 }
+
+
 
 
 
@@ -180,53 +278,114 @@ function tampilkanJadwal(data){
 
 function updateCountdown(){
 
-    if(waktuSelesai=="-" || waktuSelesai==""){
 
-        document.getElementById("countdown").innerHTML =
+    if(
+    waktuSelesai=="-" ||
+    waktuSelesai==""
+    ){
+
+
+        document
+        .getElementById("countdown")
+        .innerHTML =
         "00:00:00";
+
 
         return;
 
+
     }
 
-    const sekarang = new Date();
 
-    const target = new Date();
 
-    const waktu = waktuSelesai.split(":");
 
-    target.setHours(parseInt(waktu[0]));
-    target.setMinutes(parseInt(waktu[1]));
+    let sekarang =
+    new Date();
+
+
+
+    let target =
+    new Date();
+
+
+
+    let waktu =
+    waktuSelesai.split(":");
+
+
+
+    target.setHours(
+        Number(waktu[0])
+    );
+
+
+    target.setMinutes(
+        Number(waktu[1])
+    );
+
+
     target.setSeconds(0);
 
-    let selisih = target - sekarang;
 
-    if(selisih<=0){
 
-    document.getElementById("countdown").innerHTML =
-    "00:00:00";
 
-    return;
+
+    let selisih =
+    target - sekarang;
+
+
+
+    if(selisih<0){
+
+        selisih=0;
+
+    }
+
+
+
+
+
+    let jam =
+    Math.floor(
+        selisih/
+        (1000*60*60)
+    );
+
+
+
+    let menit =
+    Math.floor(
+        (selisih%(1000*60*60))/
+        (1000*60)
+    );
+
+
+
+    let detik =
+    Math.floor(
+        (selisih%(1000*60))/
+        1000
+    );
+
+
+
+
+    document
+    .getElementById("countdown")
+    .innerHTML =
+
+    String(jam).padStart(2,"0")
+    +":"
+    +
+    String(menit).padStart(2,"0")
+    +":"
+    +
+    String(detik).padStart(2,"0");
+
+
 
 }
 
-    const jam =
-    Math.floor(selisih/3600000);
-
-    const menit =
-    Math.floor((selisih%3600000)/60000);
-
-    const detik =
-    Math.floor((selisih%60000)/1000);
-
-    document.getElementById("countdown").innerHTML =
-        String(jam).padStart(2,"0") + ":" +
-        String(menit).padStart(2,"0") + ":" +
-        String(detik).padStart(2,"0");
-
-}
-
-setInterval(updateCountdown,1000);
 
 
 
@@ -237,19 +396,39 @@ setInterval(updateCountdown,1000);
 // FULLSCREEN
 // =================================
 
-document.getElementById("btnFullscreen").onclick=function(){
+document
+.getElementById("btnFullscreen")
+.onclick=function(){
 
-    if(!document.fullscreenElement){
 
-        document.documentElement.requestFullscreen();
+    if(
+    !document.fullscreenElement
+    ){
 
-    }else{
 
-        document.exitFullscreen();
+        document
+        .documentElement
+        .requestFullscreen();
+
+
 
     }
 
+    else{
+
+
+        document
+        .exitFullscreen();
+
+
+    }
+
+
+
 };
+
+
+
 
 
 
@@ -260,18 +439,37 @@ document.getElementById("btnFullscreen").onclick=function(){
 // START APLIKASI
 // =================================
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
 
     updateClock();
 
-    await loadJadwal();
 
-    updateCountdown();
+    loadJadwal();
 
-    setInterval(updateClock,1000);
 
-    setInterval(updateCountdown,1000);
 
-    setInterval(loadJadwal,AUTO_REFRESH);
+    setInterval(
+        updateClock,
+        1000
+    );
+
+
+
+    setInterval(
+        updateCountdown,
+        1000
+    );
+
+
+
+    setInterval(
+        loadJadwal,
+        AUTO_REFRESH
+    );
+
+
 
 });
