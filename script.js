@@ -1,29 +1,37 @@
 let DATA = {};
 
-async function loadData(){
+async function loadData() {
 
-    try{
+    try {
 
         const response = await fetch(CONFIG.API_URL);
+
+        if (!response.ok) {
+
+            throw new Error("API Error");
+
+        }
 
         DATA = await response.json();
 
         console.log(DATA);
 
         document.getElementById("status").innerHTML =
-            "Data berhasil dimuat";
+            "✅ Data berhasil dimuat";
+
+        showSchoolName();
+
+        showClasses();
 
     }
 
-    catch(err){
+    catch (err) {
 
         console.log(err);
 
         document.getElementById("status").innerHTML =
-            "Tidak dapat mengambil data";
+            "❌ Gagal mengambil data";
 
     }
 
 }
-
-loadData();
