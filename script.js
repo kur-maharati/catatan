@@ -470,6 +470,16 @@ function(){
         AUTO_REFRESH
     );
 
+    async function loadJadwal(){
+
+    const response = await fetch(API_URL);
+
+    const data = await response.json();
+
+    alert(JSON.stringify(data));
+
+}
+
 
 
 });
