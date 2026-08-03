@@ -48,11 +48,19 @@ async function loadJadwal(){
 
     try{
 
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL + "?t=" + Date.now());
 
         const data = await response.json();
 
         console.log(data);
+
+        if(data.status === false){
+
+            console.error(data.message);
+
+            return;
+
+        }
 
         tampilkanJadwal(data);
 
@@ -195,15 +203,12 @@ function updateCountdown(){
 
     if(selisih<=0){
 
-        document.getElementById("countdown").innerHTML =
-        "00:00:00";
+    document.getElementById("countdown").innerHTML =
+    "00:00:00";
 
-        // otomatis mengambil jam berikutnya
-        loadJadwal();
+    return;
 
-        return;
-
-    }
+}
 
     const jam =
     Math.floor(selisih/3600000);
@@ -252,15 +257,21 @@ document.getElementById("btnFullscreen").onclick=function(){
 
 
 // =================================
-// LOAD PERTAMA
+// START APLIKASI
 // =================================
 
-loadJadwal();
+document.addEventListener("DOMContentLoaded", async () => {
 
+    updateClock();
 
+    await loadJadwal();
 
-// =================================
-// AUTO REFRESH
-// =================================
+    updateCountdown();
 
-setInterval(loadJadwal,AUTO_REFRESH);
+    setInterval(updateClock,1000);
+
+    setInterval(updateCountdown,1000);
+
+    setInterval(loadJadwal,AUTO_REFRESH);
+
+});
