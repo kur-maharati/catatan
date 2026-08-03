@@ -5,10 +5,9 @@
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyZ6PYYJD1-Rrd8JrL17y3Wws5FWxGqKoNutAtvFuy7YM5EiBhaPeNMdvJ_46qI4xC2-g/exec";
 
-
+const AUTO_REFRESH = 30000;
 
 let waktuSelesai = "-";
-
 
 
 
@@ -18,69 +17,25 @@ let waktuSelesai = "-";
 
 function updateClock(){
 
-
     const sekarang = new Date();
 
+    document.getElementById("jamDigital").innerHTML =
+        sekarang.toLocaleTimeString("id-ID",{
+            hour12:false
+        });
 
-
-    let jam =
-    String(sekarang.getHours())
-    .padStart(2,"0");
-
-
-
-    let menit =
-    String(sekarang.getMinutes())
-    .padStart(2,"0");
-
-
-
-    let detik =
-    String(sekarang.getSeconds())
-    .padStart(2,"0");
-
-
-
-    document
-    .getElementById("jamDigital")
-    .innerHTML =
-    `${jam}:${menit}:${detik}`;
-
-
-
-
-    let tanggal =
-    sekarang.toLocaleDateString(
-        "id-ID",
-        {
+    document.getElementById("tanggal").innerHTML =
+        sekarang.toLocaleDateString("id-ID",{
             weekday:"long",
             day:"numeric",
             month:"long",
             year:"numeric"
-        }
-    );
-
-
-
-    document
-    .getElementById("tanggal")
-    .innerHTML =
-    tanggal;
-
+        });
 
 }
 
-
-
-setInterval(
-updateClock,
-1000
-);
-
-
+setInterval(updateClock,1000);
 updateClock();
-
-
 
 
 
@@ -89,40 +44,23 @@ updateClock();
 // AMBIL DATA API
 // =================================
 
-function loadJadwal(){
+async function loadJadwal(){
 
+    try{
 
-fetch(API_URL)
+        const response = await fetch(API_URL);
 
+        const data = await response.json();
 
-.then(response=>response.json())
+        console.log(data);
 
+        tampilkanJadwal(data);
 
-.then(data=>{
+    }catch(error){
 
+        console.error(error);
 
-console.log(data);
-
-
-
-tampilkanJadwal(data);
-
-
-
-})
-
-
-.catch(error=>{
-
-
-console.log(
-"Gagal mengambil API",
-error
-);
-
-
-});
-
+    }
 
 }
 
@@ -131,111 +69,95 @@ error
 
 
 
-
 // =================================
-// MENAMPILKAN JADWAL
+// MENAMPILKAN DATA
 // =================================
 
 function tampilkanJadwal(data){
 
-
-
-// ==========================
-// JAM INFORMASI
-// ==========================
-
-
-document
-.getElementById("jamKe")
-.innerHTML =
-data.jam.namaJam;
+    if(!data) return;
 
 
 
-document
-.getElementById("jamSelesai")
-.innerHTML =
-data.jam.selesai;
+    // =====================
+    // Setting
+    // =====================
+
+    if(data.setting){
+
+        if(data.setting.NamaSekolah){
+
+            document.getElementById("namaSekolah").innerHTML =
+            data.setting.NamaSekolah;
+
+        }
+
+    }
 
 
 
-// simpan untuk countdown
+    // =====================
+    // Jam
+    // =====================
 
-waktuSelesai =
-data.jam.selesai;
+    if(data.jam){
 
-
-
-
-
-
-// ==========================
-// TABEL SEMUA KELAS
-// ==========================
+        document.getElementById("jamKe").innerHTML =
+        data.jam.namaJam || "-";
 
 
-let tabel="";
+        document.getElementById("jamSelesai").innerHTML =
+        data.jam.selesai || "-";
 
 
+        waktuSelesai =
+        data.jam.selesai || "-";
 
-data.jadwal.data.forEach(
-(item)=>{
-
-
-tabel += `
-
-
-<tr>
-
-
-<td>
-${item.kelas}
-</td>
+    }
 
 
 
-<td>
-${item.sekarang.mapel}
-</td>
+    // =====================
+    // Jadwal
+    // =====================
 
+    let html = "";
 
+    if(data.jadwal && data.jadwal.data){
 
-<td>
-${item.sekarang.guru}
-</td>
+        data.jadwal.data.forEach(item=>{
 
+            html += `
+            <tr>
 
+                <td class="kelas">
+                    ${item.kelas}
+                </td>
 
-<td>
-${item.berikutnya.mapel}
-</td>
+                <td class="mapel">
+                    ${item.sekarang?.mapel ?? "-"}
+                </td>
 
+                <td class="guru">
+                    ${item.sekarang?.guru ?? "-"}
+                </td>
 
+                <td class="mapel-next">
+                    ${item.berikutnya?.mapel ?? "-"}
+                </td>
 
-<td>
-${item.berikutnya.guru}
-</td>
+                <td class="guru-next">
+                    ${item.berikutnya?.guru ?? "-"}
+                </td>
 
+            </tr>
+            `;
 
+        });
 
-</tr>
+    }
 
-
-`;
-
-
-});
-
-
-
-
-
-document
-.getElementById("dataJadwal")
-.innerHTML =
-tabel;
-
-
+    document.getElementById("dataJadwal").innerHTML = html;
 
 }
 
@@ -244,154 +166,62 @@ tabel;
 
 
 
-
-
-
 // =================================
-// COUNTDOWN OTOMATIS
+// COUNTDOWN
 // =================================
 
 function updateCountdown(){
 
+    if(waktuSelesai=="-" || waktuSelesai==""){
 
+        document.getElementById("countdown").innerHTML =
+        "00:00:00";
 
-if(
-waktuSelesai=="-" ||
-waktuSelesai==""
-){
+        return;
 
-document
-.getElementById("countdown")
-.innerHTML =
-"00:00:00";
+    }
 
+    const sekarang = new Date();
 
-return;
+    const target = new Date();
 
-}
+    const waktu = waktuSelesai.split(":");
 
+    target.setHours(parseInt(waktu[0]));
+    target.setMinutes(parseInt(waktu[1]));
+    target.setSeconds(0);
 
+    let selisih = target - sekarang;
 
+    if(selisih<=0){
 
+        document.getElementById("countdown").innerHTML =
+        "00:00:00";
 
-let sekarang =
-new Date();
+        // otomatis mengambil jam berikutnya
+        loadJadwal();
 
+        return;
 
+    }
 
-let target =
-new Date();
+    const jam =
+    Math.floor(selisih/3600000);
 
+    const menit =
+    Math.floor((selisih%3600000)/60000);
 
+    const detik =
+    Math.floor((selisih%60000)/1000);
 
-let waktu =
-waktuSelesai.split(":");
-
-
-
-target.setHours(
-parseInt(waktu[0])
-);
-
-
-target.setMinutes(
-parseInt(waktu[1])
-);
-
-
-target.setSeconds(0);
-
-
-
-
-
-let selisih =
-target - sekarang;
-
-
-
-
-
-if(selisih<0){
-
-selisih=0;
+    document.getElementById("countdown").innerHTML =
+        String(jam).padStart(2,"0") + ":" +
+        String(menit).padStart(2,"0") + ":" +
+        String(detik).padStart(2,"0");
 
 }
 
-
-
-
-
-
-let jam =
-Math.floor(
-selisih/
-(1000*60*60)
-);
-
-
-
-let menit =
-Math.floor(
-(selisih %
-(1000*60*60))
-/
-(1000*60)
-);
-
-
-
-let detik =
-Math.floor(
-(selisih %
-(1000*60))
-/
-1000
-);
-
-
-
-
-
-document
-.getElementById("countdown")
-.innerHTML =
-
-
-String(jam)
-.padStart(2,"0")
-
-+
-
-":"
-
-+
-
-String(menit)
-.padStart(2,"0")
-
-+
-
-":"
-
-+
-
-String(detik)
-.padStart(2,"0");
-
-
-
-}
-
-
-
-setInterval(
-updateCountdown,
-1000
-);
-
-
-
+setInterval(updateCountdown,1000);
 
 
 
@@ -402,43 +232,19 @@ updateCountdown,
 // FULLSCREEN
 // =================================
 
+document.getElementById("btnFullscreen").onclick=function(){
 
-document
-.getElementById("btnFullscreen")
-.onclick =
-function(){
+    if(!document.fullscreenElement){
 
+        document.documentElement.requestFullscreen();
 
+    }else{
 
-let layar =
-document.documentElement;
+        document.exitFullscreen();
 
-
-
-if(
-layar.requestFullscreen
-){
-
-layar.requestFullscreen();
-
-
-}
-
-else if(
-layar.webkitRequestFullscreen
-){
-
-layar.webkitRequestFullscreen();
-
-
-}
-
+    }
 
 };
-
-
-
-
 
 
 
@@ -449,18 +255,12 @@ layar.webkitRequestFullscreen();
 // LOAD PERTAMA
 // =================================
 
-
 loadJadwal();
 
 
 
-
 // =================================
-// REFRESH DATA
+// AUTO REFRESH
 // =================================
 
-
-setInterval(
-loadJadwal,
-30000
-);
+setInterval(loadJadwal,AUTO_REFRESH);
