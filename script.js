@@ -1,27 +1,40 @@
-async function loadData() {
+document.getElementById("status").textContent =
+"Website berhasil dimuat.";
 
-    const status = document.getElementById("status");
+document.getElementById("fullscreenBtn").onclick = () => {
 
-    try {
+    if(!document.fullscreenElement){
 
-        status.innerHTML = "Mengambil data...";
+        document.documentElement.requestFullscreen();
 
-        const response = await fetch(CONFIG.API_URL);
+    }else{
 
-        const data = await response.json();
-
-        console.log(data);
-
-        status.innerHTML = "Berhasil";
-
-    } catch (e) {
-
-        console.error(e);
-
-        status.innerHTML = e.message;
+        document.exitFullscreen();
 
     }
 
-}
+};
 
-loadData();
+for(let i=1;i<=9;i++){
+
+    document.getElementById("gridKelas").innerHTML += `
+
+        <div class="card">
+
+            <div class="namaKelas">
+
+                Kelas ${i}
+
+            </div>
+
+            <div>
+
+                Menunggu data...
+
+            </div>
+
+        </div>
+
+    `;
+
+}
