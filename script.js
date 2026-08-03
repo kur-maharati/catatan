@@ -1,72 +1,27 @@
-let DATA = {};
-
 async function loadData() {
+
+    const status = document.getElementById("status");
 
     try {
 
-        document.getElementById("status").innerHTML = "Mengambil data...";
+        status.innerHTML = "Mengambil data...";
 
-        const response = await fetch(CONFIG.API_URL + "?t=" + new Date().getTime(), {
-            method: "GET",
-            cache: "no-cache"
-        });
+        const response = await fetch(CONFIG.API_URL);
 
-        console.log("Status:", response.status);
+        const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-        }
+        console.log(data);
 
-        DATA = await response.json();
+        status.innerHTML = "Berhasil";
 
-        console.log("DATA:", DATA);
+    } catch (e) {
 
-        showSchoolName();
-        showClasses();
+        console.error(e);
 
-        document.getElementById("status").innerHTML = "✅ Data berhasil dimuat";
-
-    } catch (err) {
-
-        console.error("ERROR:", err);
-
-        document.getElementById("status").innerHTML =
-            "❌ " + err.message;
+        status.innerHTML = e.message;
 
     }
 
 }
 
-function showSchoolName() {
-
-    if (!DATA.setting) return;
-
-    document.getElementById("schoolName").textContent =
-        DATA.setting.NAMA_SEKOLAH;
-
-}
-
-function showClasses() {
-
-    const grid = document.getElementById("gridKelas");
-
-    grid.innerHTML = "";
-
-    if (!DATA.kelas) return;
-
-    DATA.kelas.forEach(kelas => {
-
-        if (!kelas.Aktif) return;
-
-        grid.innerHTML += `
-        <div class="card">
-            <div class="kelas">${kelas.Kelas}</div>
-            <div class="jadwal">Menunggu jadwal...</div>
-        </div>`;
-    });
-
-}
-
 loadData();
-
-setInterval(loadData, CONFIG.REFRESH_INTERVAL);
