@@ -117,6 +117,11 @@ async function loadJadwal(){
 
 function tampilkanJadwal(data){
 
+function tampilkanJadwal(data){
+
+    console.log("MASUK TAMPILKAN JADWAL");
+    console.log(data);
+    console.log(data.jadwal);
 
 
     if(!data)
