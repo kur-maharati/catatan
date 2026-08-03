@@ -1,170 +1,451 @@
+/* ==================================
+   GLOBAL
+================================== */
+
+
 *{
-margin:0;
-padding:0;
+
 box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+
 }
+
 
 body{
 
-background:#ECEFF1;
+margin:0;
 
-}
+padding:0;
 
-header{
+font-family:
+Arial,
+Helvetica,
+sans-serif;
 
-height:120px;
-
-background:#1976D2;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:20px;
+background:#061a40;
 
 color:white;
 
+height:100vh;
+
+overflow:hidden;
+
 }
 
-.left{
+
+
+
+.container{
+
+width:100%;
+
+height:100vh;
+
+padding:15px;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+
+
+
+
+/* ==================================
+   HEADER
+================================== */
+
+
+header{
+
+height:18%;
 
 display:flex;
 
 align-items:center;
 
-gap:15px;
+justify-content:space-between;
+
+background:#0b2d6b;
+
+border-radius:15px;
+
+padding:15px 25px;
 
 }
 
-#logo{
 
-width:70px;
 
-height:70px;
+
+
+.logo img{
+
+width:90px;
+
+height:90px;
 
 object-fit:contain;
 
 }
 
-#schoolName{
 
-font-size:32px;
 
-}
 
-#subtitle{
-
-margin-top:5px;
-
-font-size:18px;
-
-}
-
-.center{
+.identitas{
 
 text-align:center;
 
+flex:1;
+
 }
 
-#clock{
 
-font-size:48px;
+
+.identitas h1{
+
+margin:0;
+
+font-size:40px;
 
 font-weight:bold;
 
 }
 
-#today{
 
-margin-top:8px;
+
+.identitas h3{
+
+margin:10px 0;
+
+font-size:22px;
+
+}
+
+
+
+
+.clock{
+
+font-size:45px;
+
+font-weight:bold;
+
+background:#f4c430;
+
+color:#061a40;
+
+padding:15px 25px;
+
+border-radius:12px;
+
+}
+
+
+
+
+
+
+/* ==================================
+   INFORMASI JAM
+================================== */
+
+
+.info{
+
+height:15%;
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:15px;
+
+margin-top:15px;
+
+}
+
+
+
+
+.box{
+
+background:#0b2d6b;
+
+border-radius:15px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+
+
+.box h3{
+
+margin:0;
 
 font-size:20px;
 
 }
 
-#period{
 
-margin-top:5px;
 
-font-size:24px;
+.box h1{
 
-font-weight:bold;
+margin:5px;
 
-}
+font-size:42px;
 
-#countdown{
-
-margin-top:5px;
-
-font-size:18px;
+color:#f4c430;
 
 }
 
-.right button{
 
-padding:12px 18px;
 
-font-size:18px;
 
-cursor:pointer;
 
-border:none;
 
-border-radius:8px;
+/* ==================================
+   TABEL JADWAL
+================================== */
 
-}
 
-main{
+.jadwal{
 
-padding:20px;
+height:57%;
 
-}
+margin-top:15px;
 
-#gridKelas{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:20px;
+overflow:hidden;
 
 }
 
-.card{
 
-background:white;
 
-border-radius:12px;
 
-padding:20px;
+table{
 
-min-height:180px;
+width:100%;
 
-box-shadow:0 3px 8px rgba(0,0,0,.2);
+height:100%;
 
-}
+border-collapse:collapse;
 
-.namaKelas{
-
-font-size:28px;
-
-font-weight:bold;
-
-margin-bottom:20px;
+table-layout:fixed;
 
 }
 
-footer{
 
-background:white;
+
+th{
+
+background:#f4c430;
+
+color:#061a40;
+
+font-size:20px;
 
 padding:10px;
 
+}
+
+
+
+td{
+
+background:#0b2d6b;
+
+border:2px solid #061a40;
+
 text-align:center;
 
-font-size:18px;
+font-size:22px;
+
+padding:8px;
+
+}
+
+
+
+tbody tr{
+
+height:11%;
+
+}
+
+
+
+
+
+/* ukuran kolom */
+
+
+th:nth-child(1),
+td:nth-child(1){
+
+width:12%;
+
+}
+
+
+
+th:nth-child(2),
+td:nth-child(2){
+
+width:23%;
+
+}
+
+
+
+th:nth-child(3),
+td:nth-child(3){
+
+width:18%;
+
+}
+
+
+
+th:nth-child(4),
+td:nth-child(4){
+
+width:27%;
+
+}
+
+
+
+th:nth-child(5),
+td:nth-child(5){
+
+width:20%;
+
+}
+
+
+
+
+
+
+
+/* ==================================
+   BUTTON FULLSCREEN
+================================== */
+
+
+#btnFullscreen{
+
+
+height:50px;
+
+margin-top:10px;
+
+border:none;
+
+border-radius:10px;
+
+background:#f4c430;
+
+color:#061a40;
+
+font-size:22px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+
+
+
+#btnFullscreen:hover{
+
+opacity:0.8;
+
+}
+
+
+
+
+
+
+/* ==================================
+   MODE FULLSCREEN
+================================== */
+
+
+:fullscreen body{
+
+background:#061a40;
+
+}
+
+
+
+:fullscreen .container{
+
+padding:20px;
+
+}
+
+
+
+
+
+
+
+/* ==================================
+   RESPONSIVE
+================================== */
+
+
+@media(max-width:1000px){
+
+
+.identitas h1{
+
+font-size:28px;
+
+}
+
+
+.clock{
+
+font-size:32px;
+
+}
+
+
+
+td{
+
+font-size:16px;
+
+}
+
+
+th{
+
+font-size:15px;
+
+}
+
+
+.box h1{
+
+font-size:30px;
+
+}
+
+
 
 }
